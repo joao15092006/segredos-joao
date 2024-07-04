@@ -10,6 +10,7 @@ export const UserContextGlobal = React.createContext({});
 
 export default function UserContext(props) {
   const [email, setEmail] = React.useState('');
+  const [nome, setNome] = React.useState('')
   const [senha, setSenha] = React.useState('');
   const [logado, setLogado] = React.useState(false)
 
@@ -20,8 +21,14 @@ export default function UserContext(props) {
 
   function fazerLogin() {
     const auth = getAuth(app)
-    signInWithEmailAndPassword(auth, email, senha)
+    signUpWithEmailAndPassword(auth, email, senha)
     .then( user => setLogado(true))
+    .catch( erro => console.log("erro no login, tente novamente" + erro))
+  }
+  function cadastrar() {
+    const auth = getAuth(app)
+    createUserWithEmailAndPassword(auth, email, senha)
+    .then( user => hideModal())
     .catch( erro => console.log("erro no login, tente novamente" + erro))
   }
 
@@ -36,7 +43,10 @@ export default function UserContext(props) {
         fazerLogin,
         visible,
         showModal,
-        hideModal
+        hideModal,
+        nome,
+        setNome,
+        cadastrar
       }}>
       {props.children}
     </UserContextGlobal.Provider>
